@@ -1,6 +1,8 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
+import mongoose from 'mongoose'
+
+
+const Schema = mongoose.Schema
 //Create schema
 const AssistantSchema = new Schema({
   name: {
@@ -23,4 +25,5 @@ const AssistantSchema = new Schema({
   }
 });
 
-module.exports = Assistant = mongoose.model('assistants', AssistantSchema)
+const Assistant = mongoose.model('assistants', AssistantSchema)
+export default Assistant

@@ -1,14 +1,18 @@
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const keys = require('../config/keys');
-const Provider = require('../models/Provider');
+
+
+import passportJwt from 'passport-jwt';
+import Provider from '../models/Provider.js';
+import keys from './keys.js';
+
+const {ExtractJwt,Strategy: JwtStrategy} = passportJwt;
 
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = keys.secretOrKey;
 
-module.exports = passport => {
+
+export default (passport) => {
   passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
     Provider.findOne({email: jwt_payload.email})
       .then(provider => {

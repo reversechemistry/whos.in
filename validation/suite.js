@@ -1,6 +1,6 @@
-const isEmpty = require('./is-empty');
+import isEmpty from './is-empty.js';
 
-module.exports = function validateSuiteInput(data){
+export default function validateSuiteInput(data){
   let errors = {};
 
   if(isEmpty(data.suitename)){

@@ -1,7 +1,7 @@
-const Validator = require('validator');
-const isEmpty = require('./is-empty');
+import Validator from 'validator';
+import isEmpty from './is-empty.js';
 
-module.exports = function validateAssistantInput(data){
+export default function validateAssistantInput(data){
   let errors = {};
 
   if(!Validator.isMobilePhone(data.phone)){

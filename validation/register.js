@@ -1,7 +1,7 @@
-const Validator = require('validator');
-const isEmpty = require('./is-empty');
+import Validator from 'validator';
+import isEmpty from './is-empty.js';
 
-module.exports = function validateRegisterInput(data) {
+export default function validateRegisterInput(data) {
   let errors = {};
 
   if(!Validator.isLength(data.name, { min: 3 })) {

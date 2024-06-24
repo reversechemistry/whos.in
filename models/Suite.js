@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose'
+
+const Schema = mongoose.Schema
 
 //Create schema
 const SuiteSchema = new Schema({
@@ -17,4 +18,6 @@ const SuiteSchema = new Schema({
   }
 });
 
-module.exports = Suite = mongoose.model('suites', SuiteSchema)
+const Suite = mongoose.model('suites', SuiteSchema)
+
+export default Suite

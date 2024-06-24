@@ -1,20 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const passport = require('passport');
-//load assistant model
-const Assistant = require('../../models/Assistant');
-//validation
-const validateAssistantInput = require('../../validation/assistant');
+import express from 'express';
+import passport from 'passport';
+
+import Assistant from '../../models/Assistant.js';
+import validateAssistantInput from '../../validation/assistant.js';
+
+const assistantsRouter = express.Router();
 
 //@route  GET /api/assistants/test
 //@desc   Tests assistants js
 //@access Public
-router.get('/test', (req, res) => res.json({msg: 'Assistants works'}));
+assistantsRouter.get('/test', (req, res) => res.json({msg: 'Assistants works'}));
 
 //@route  POST  /api/assistants/add
 //@desc   Add an assistant
 //@access Public
-router.post('/add', passport.authenticate('jwt', { session: false }),(req, res) => {
+assistantsRouter.post('/add', passport.authenticate('jwt', { session: false }),(req, res) => {
   const {errors, isValid} = validateAssistantInput(req.body);
 
   if(!isValid){
@@ -43,7 +43,7 @@ router.post('/add', passport.authenticate('jwt', { session: false }),(req, res) 
 //@route  POST  /api/assistants/update
 //@desc   Update an assistant's status/leave note
 //@access Public
-router.post('/update', (req, res) => {
+assistantsRouter.post('/update', (req, res) => {
   Assistant.findOne({name: req.body.name})
     .then((assistant) => {
       const assistantFields = {};
@@ -69,7 +69,7 @@ router.post('/update', (req, res) => {
 //@route   GET    /api/assistants
 //@desc    Get all assistants data
 //@access  Public
-router.get('/', (req, res) => {
+assistantsRouter.get('/', (req, res) => {
   const errors = {}
 
   Assistant.find()
@@ -88,7 +88,7 @@ router.get('/', (req, res) => {
 //@route   DELETE /api/assistants/delete
 //@desc    Delete an assistant from the record
 //@access  PUBLIC
-router.delete(
+assistantsRouter.delete(
   '/delete', passport.authenticate('jwt', { session: false }), 
   (req, res) => {
     Assistant.findOneAndRemove({name: req.body.name})
@@ -97,4 +97,5 @@ router.delete(
   }
 );
 
-module.exports = router;
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:1797839052.
+export default assistantsRouter ;

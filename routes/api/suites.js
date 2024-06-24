@@ -1,20 +1,19 @@
-const passport = require('passport');
-const express = require('express');
-const router = express.Router();
-//load suite model
-const Suite = require('../../models/Suite')
-//validation
-const validateSuiteInput = require ('../../validation/suite');
+import express from "express"
+import passport from "passport"
+import Suite from "../../models/Suite.js"
+import validateSuiteInput from "../../validation/suite.js"
+
+const suitesRouter = express.Router();
 
 //@route  GET /api/suites/test
 //@desc   Tests suite js
 //@access Public
-router.get('/test', (req, res) => res.json({msg: 'Suites works'}));
+suitesRouter.get('/test', (req, res) => res.json({msg: 'Suites works'}));
 
 //@route  POST  /api/suites/add
 //@route  Add a suite
 //@access Public
-router.post('/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+suitesRouter.post('/add', passport.authenticate('jwt', { session: false }), (req, res) => {
   const {errors, isValid} = 
   validateSuiteInput(req.body);
 
@@ -44,7 +43,7 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res)
 //@route  POST  /api/suites/update
 //@desc   Update a suite's status, notes, etc.
 //@access Public
-router.post('/update', (req, res) => {
+suitesRouter.post('/update', (req, res) => {
   Suite.findOne({suitename: req.body.suitename})
     .then((suite) => {
       const suiteFields = {};
@@ -70,7 +69,7 @@ router.post('/update', (req, res) => {
 //@route   GET   /api/suites
 //@desc    Get all suite data
 //@access  Public
-router.get('/', (req, res) => {
+suitesRouter.get('/', (req, res) => {
   const errors = {};
 
   Suite.find()
@@ -89,7 +88,7 @@ router.get('/', (req, res) => {
 //@route   DELETE /api/suites/delete
 //@desc    Delete a suite from the record
 //@access  PUBLIC
-router.delete(
+suitesRouter.delete(
   '/delete', passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Suites.findOneAndRemove({name: req.body.suitename})
@@ -98,4 +97,4 @@ router.delete(
   }
 );
 
-module.exports = router;
+export default suitesRouter;

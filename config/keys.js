@@ -1,5 +1,12 @@
+import proKeys from "./keys_prod.js"
+
+import devKeys from "./keys_dev.js"
+
+let keys = devKeys
+
+
 if(process.env.NODE_ENV === 'production'){
-  module.exports = require('./keys_prod')
-} else {
-  module.exports = require('./keys_dev')
+  keys = proKeys
 }
+
+export default keys

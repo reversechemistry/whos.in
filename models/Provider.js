@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose'
+
+const Schema = mongoose.Schema
 
 const providerSchema = new Schema({
   name: {
@@ -15,4 +16,5 @@ const providerSchema = new Schema({
   }
 });
 
-module.exports = Provider = mongoose.model('providers', providerSchema);
+const Provider = mongoose.model('providers', providerSchema);
+export default Provider

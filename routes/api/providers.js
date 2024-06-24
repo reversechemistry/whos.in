@@ -1,21 +1,23 @@
-const express = require("express");
-const bcrypt = require('bcryptjs');
-const Provider = require('../../models/Provider');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const nodemailer = require('nodemailer');
-const keys = require('../../config/keys');
-const validateLoginInput = require('../../validation/login');
-const validateRegisterInput = require('../../validation/register');
-const validateChangepwInput = require('../../validation/changepw');
-const validateProviderInput = require('../../validation/deleteprovider');
-const router = express.Router();
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import Provider from '../../models/Provider.js';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import nodemailer from 'nodemailer';
+import keys from '../../config/keys.js';
+import validateLoginInput from '../../validation/login.js';
+import validateRegisterInput from '../../validation/register.js';
+import validateChangepwInput from '../../validation/changepw.js';
+
+
+
+const providersRouter = express.Router();
 
 
 //@route    POST    /api/providers/register
 //@desc     Register provider
 //@access   Public
-router.post('/register', (req, res) => {
+providersRouter.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
   if (!isValid) {
@@ -60,7 +62,7 @@ router.post('/register', (req, res) => {
 //@desc     Log in provider
 //@access   Public
 
-router.post('/login', (req, res) => {
+providersRouter.post('/login', (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
   if (!isValid) {
@@ -106,7 +108,7 @@ router.post('/login', (req, res) => {
 //@desc     Return current provider
 //@access   Private
 
-router.get('/current', 
+providersRouter.get('/current', 
   passport.authenticate('jwt', {
   session: false}), (req, res) => {
     return res.json(req.provider);
@@ -116,7 +118,7 @@ router.get('/current',
 //@route    POST  /api/providers/forgotpw
 //@desc     Reset provider's password
 //@access   Public
-router.post('/forgotpw', (req, res) => {
+providersRouter.post('/forgotpw', (req, res) => {
   const email = req.body.email;
   let newPassword = JSON.stringify(Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000);
 
@@ -169,7 +171,7 @@ router.post('/forgotpw', (req, res) => {
 //@route  POST  /api/providers/changepw
 //@desc   Change provider's password
 //@access Private
-router.post(
+providersRouter.post(
   '/changepw', 
   passport.authenticate('jwt', { session: false }), (req, res) => {
     const { errors, isValid } = validateChangepwInput(req.body);
@@ -218,7 +220,7 @@ router.post(
 // @route   DELETE  api/providers/delete
 // @desc    Delete a provider/admin
 // @access  Private
-router.delete(
+providersRouter.delete(
   '/delete', 
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
@@ -231,7 +233,7 @@ router.delete(
 //@route    POST api/providers/update
 //@desc     Update a provider's name
 //@access   Private
-router.post('/update', passport.authenticate('jwt', { session: false }), (req, res) => {
+providersRouter.post('/update', passport.authenticate('jwt', { session: false }), (req, res) => {
   Provider.findOne({name: req.body.name})
     .then(provider)
 
@@ -241,7 +243,7 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
 // @route   GET api/providers/all
 // @desc    Get all providers' names
 // @access  Public
-router.get('/all', (req, res) => {
+providersRouter.get('/all', (req, res) => {
   const errors = {};
 
   Provider.find({}, '-password')
@@ -256,4 +258,4 @@ router.get('/all', (req, res) => {
     .catch((err) => res.status(404).json(err));
 });
 
-module.exports = router;
+export default providersRouter;
